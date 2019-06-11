@@ -67,7 +67,7 @@ Product.createProduct = function createProduct(newProduct, result) {
 };
 
 Order.getAllOrders = function getAllOrders(result) {
-    sql.query("select * from j4qt8_hikashop_review", function (err, res) {
+    sql.query("select * from j4qt8_hikashop_order", function (err, res) {
 
             if(err) {
                 console.log("error: ", err);
