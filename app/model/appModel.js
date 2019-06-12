@@ -66,6 +66,30 @@ Product.createProduct = function createProduct(newProduct, result) {
         });           
 };
 
+Product.getProductById = function createProduct(productId, result) {
+    sql.query("Select product_name from j4qt8_hikashop_product where product_id = ? ", productId, function (err, res) {             
+            if(err) {
+                console.log("error: ", err);
+                result(err, null);
+            }
+            else{
+                result(null, res);
+          
+            }
+        });  
+    };
+Product.updateById = function(id, product, result){
+    sql.query("UPDATE j4qt8_hikashop_product SET product_name = ? WHERE product_id = ?", [product.product, id], function (err, res) {
+            if(err) {
+                console.log("error: ", err);
+                  result(null, err);
+               }
+             else{   
+               result(null, res);
+                  }
+              }); 
+  };
+
 Order.getAllOrders = function getAllOrders(result) {
     sql.query("select * from j4qt8_hikashop_order", function (err, res) {
 

@@ -33,6 +33,22 @@ else{
 }
 };
 
+var read_a_product = function(req, res) {
+  Product.getProductById(req.params.productId, function(err, product) {
+    if (err)
+      res.send(err);
+    res.json(product);
+  });
+};
+
+var update_a_product = function(req, res) {
+  Product.updateById(req.params.productId, new Product(req.body), function(err, product) {
+    if (err)
+      res.send(err);
+    res.json(product);
+  });
+};
+
 var list_all_orders = function(req, res) {
   Order.getAllOrders(function(err, order) {
 
@@ -83,5 +99,7 @@ module.exports= {
   list_all_users,
   list_all_votes,
   list_all_categories,
-  create_a_product
+  create_a_product,
+  update_a_product,
+  read_a_product
 };

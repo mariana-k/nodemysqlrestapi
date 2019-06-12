@@ -1,26 +1,31 @@
 'use strict';
 module.exports = function(app) {
-  var {list_all_orders, list_all_products, create_a_product, list_all_users, list_all_votes, list_all_categories} = require('../controller/appController');
+  var appController = require('../controller/appController');
 
   // productList Routes
   app.route('/products')
-    .get(list_all_products).post(create_a_product);
+    .get(appController.list_all_products).post(appController.create_a_product);
+
+    app.route('/products/:productId')
+    .get(appController.read_a_product)
+    .put(appController.update_a_product);
+    
 
     // orderList Routes
   app.route('/orders')
-  .get(list_all_orders);
+  .get(appController.list_all_orders);
    
     // userList Routes
     app.route('/users')
-    .get(list_all_users);
+    .get(appController.list_all_users);
 
      // voteList Routes
      app.route('/votes')
-     .get(list_all_votes);
+     .get(appController.list_all_votes);
 
       // categoryList Routes
     app.route('/categories')
-    .get(list_all_categories);
+    .get(appController.list_all_categories);
 
     };
 
