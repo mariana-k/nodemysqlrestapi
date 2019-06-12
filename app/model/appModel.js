@@ -3,7 +3,7 @@ var sql = require('./db.js');
 
 //Product object constructor
 var Product = function(product){
-    this.product = product.product;
+    this.product_name = product.product_name;
     this.status = product.status;
     this.created_at = new Date();
 };
@@ -79,7 +79,7 @@ Product.getProductById = function createProduct(productId, result) {
         });  
     };
 Product.updateById = function(id, product, result){
-    sql.query("UPDATE j4qt8_hikashop_product SET product_name = ? WHERE product_id = ?", [product.product, id], function (err, res) {
+    sql.query("UPDATE j4qt8_hikashop_product SET product_name = ? WHERE product_id = ?", [product.product_name, id], function (err, res) {
             if(err) {
                 console.log("error: ", err);
                   result(null, err);

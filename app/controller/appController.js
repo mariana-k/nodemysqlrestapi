@@ -3,6 +3,7 @@
 var {Product, Order, User, Vote, Category} = require('../model/appModel.js');
 
 var list_all_products = function(req, res) {
+  
   Product.getAllProduct(function(err, product) {
 
     console.log('controller')
@@ -42,10 +43,10 @@ var read_a_product = function(req, res) {
 };
 
 var update_a_product = function(req, res) {
-  Product.updateById(req.params.productId, new Product(req.body), function(err, product) {
+  Product.updateById(req.params.productId, new Product(req.body), function(err, product_name) {
     if (err)
       res.send(err);
-    res.json(product);
+    res.json(product_name);
   });
 };
 
