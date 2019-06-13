@@ -43,10 +43,10 @@ var read_a_product = function(req, res) {
 };
 
 var update_a_product = function(req, res) {
-  Product.updateById(req.params.productId, new Product(req.body), function(err, product_name) {
+  Product.updateById(req.params.productId, new Product(req.body), function(err, product) {
     if (err)
       res.send(err);
-    res.json(product_name);
+    res.json(product);
   });
 };
 

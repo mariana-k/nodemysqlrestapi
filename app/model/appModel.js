@@ -1,5 +1,5 @@
 'user strict';
-var sql = require('./db.js');
+var pool = require('./db.js');
 
 //Product object constructor
 var Product = function(product){
@@ -38,8 +38,14 @@ var Category = function(category){
 };
 
 Product.getAllProduct = function getAllProduct(result) {
-        sql.query("select * from j4qt8_hikashop_product", function (err, res) {
-
+    pool.getConnection(function(err, connection) {
+        if(err) { 
+          console.log(err); 
+          callback(true); 
+          return; 
+        }
+        connection.query("select * from j4qt8_hikashop_product", function (err, res) {
+            connection.release(); // always put connection back in pool after last query
                 if(err) {
                     console.log("error: ", err);
                     result(null, err);
@@ -50,11 +56,18 @@ Product.getAllProduct = function getAllProduct(result) {
                  result(null, res);
                 }
             });   
+    });
 };
 
 Product.createProduct = function createProduct(newProduct, result) {    
-    sql.query("INSERT INTO j4qt8_hikashop_product set ?", newProduct, function (err, res) {
-            
+    pool.getConnection(function(err, connection) {
+        if(err) { 
+          console.log(err); 
+          callback(true); 
+          return; 
+        }
+    connection.query("INSERT INTO j4qt8_hikashop_product set ?", newProduct, function (err, res) {
+        connection.release(); 
             if(err) {
                 console.log("error: ", err);
                 result(err, null);
@@ -63,12 +76,20 @@ Product.createProduct = function createProduct(newProduct, result) {
                 console.log(res.insertId);
                 result(null, res.insertId);
             }
-        });           
+        });        
+    });   
 };
 
 Product.getProductById = function createProduct(productId, result) {
-    sql.query("Select product_name from j4qt8_hikashop_product where product_id = ? ", productId, function (err, res) {             
-            if(err) {
+    pool.getConnection(function(err, connection) {
+        if(err) { 
+          console.log(err); 
+          callback(true); 
+          return; 
+        }
+    connection.query("Select product_name from j4qt8_hikashop_product where product_id = ? ", productId, function (err, res) {             
+        connection.release();    
+        if(err) {
                 console.log("error: ", err);
                 result(err, null);
             }
@@ -77,10 +98,18 @@ Product.getProductById = function createProduct(productId, result) {
           
             }
         });  
+    });
     };
 Product.updateById = function(id, product, result){
-    sql.query("UPDATE j4qt8_hikashop_product SET product_name = ? WHERE product_id = ?", [product.product_name, id], function (err, res) {
-            if(err) {
+    pool.getConnection(function(err, connection) {
+        if(err) { 
+          console.log(err); 
+          callback(true); 
+          return; 
+        }
+    connection.query("UPDATE j4qt8_hikashop_product SET product_name = ? WHERE product_id = ?", [product.product_name, id], function (err, res) {
+        connection.release();    
+        if(err) {
                 console.log("error: ", err);
                   result(null, err);
                }
@@ -88,11 +117,18 @@ Product.updateById = function(id, product, result){
                result(null, res);
                   }
               }); 
+            });
   };
 
 Order.getAllOrders = function getAllOrders(result) {
-    sql.query("select * from j4qt8_hikashop_order", function (err, res) {
-
+    pool.getConnection(function(err, connection) {
+        if(err) { 
+          console.log(err); 
+          callback(true); 
+          return; 
+        }
+    connection.query("select * from j4qt8_hikashop_order", function (err, res) {
+        connection.release(); 
             if(err) {
                 console.log("error: ", err);
                 result(null, err);
@@ -102,12 +138,19 @@ Order.getAllOrders = function getAllOrders(result) {
 
              result(null, res);
             }
-        });   
+        }); 
+    });  
 };
 
 User.getAllUsers = function getAllUsers(result) {
-    sql.query("select * from j4qt8_hikashop_user", function (err, res) {
-
+    pool.getConnection(function(err, connection) {
+        if(err) { 
+          console.log(err); 
+          callback(true); 
+          return; 
+        }
+    connection.query("select * from j4qt8_hikashop_user", function (err, res) {
+        connection.release(); 
             if(err) {
                 console.log("error: ", err);
                 result(null, err);
@@ -118,11 +161,19 @@ User.getAllUsers = function getAllUsers(result) {
              result(null, res);
             }
         });   
-};
+    });
+    };
+
 
 Vote.getAllVotes = function getAllVotes(result) {
-    sql.query("select * from j4qt8_hikashop_vote", function (err, res) {
-
+    pool.getConnection(function(err, connection) {
+        if(err) { 
+          console.log(err); 
+          callback(true); 
+          return; 
+        }
+    connection.query("select * from j4qt8_hikashop_vote", function (err, res) {
+        connection.release(); 
             if(err) {
                 console.log("error: ", err);
                 result(null, err);
@@ -133,11 +184,18 @@ Vote.getAllVotes = function getAllVotes(result) {
              result(null, res);
             }
         });   
+    });
 };
 
 Category.getAllCategories = function getAllCategories(result) {
-    sql.query("select * from j4qt8_hikashop_category", function (err, res) {
-
+    pool.getConnection(function(err, connection) {
+        if(err) { 
+          console.log(err); 
+          callback(true); 
+          return; 
+        }
+    connection.query("select * from j4qt8_hikashop_category", function (err, res) {
+        connection.release(); 
             if(err) {
                 console.log("error: ", err);
                 result(null, err);
@@ -147,7 +205,8 @@ Category.getAllCategories = function getAllCategories(result) {
 
              result(null, res);
             }
-        });   
+        });  
+    }); 
 };
 module.exports= {
     Product,
