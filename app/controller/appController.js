@@ -49,7 +49,21 @@ var update_a_product = function(req, res) {
     res.json(product);
   });
 };
+var read_a_user = function(req, res) {
+  User.getUserById(req.params.userId, function(err, user) {
+    if (err)
+      res.send(err);
+    res.json(user);
+  });
+};
 
+var update_a_user = function(req, res) {
+  User.updateById(req.params.userId, new User(req.body), function(err, user) {
+    if (err)
+      res.send(err);
+    res.json(user);
+  });
+};
 var list_all_orders = function(req, res) {
   Order.getAllOrders(function(err, order) {
 
@@ -83,6 +97,22 @@ var list_all_votes = function(req, res) {
   });
 };
 
+var read_a_vote = function(req, res) {
+  Vote.getVoteById(req.params.voteId, function(err, vote) {
+    if (err)
+      res.send(err);
+    res.json(vote);
+  });
+};
+
+var update_a_vote = function(req, res) {
+  Vote.updateById(req.params.voteId, new Vote(req.body), function(err, vote) {
+    if (err)
+      res.send(err);
+    res.json(vote);
+  });
+};
+
 var list_all_categories = function(req, res) {
   Category.getAllCategories(function(err, category) {
 
@@ -102,5 +132,9 @@ module.exports= {
   list_all_categories,
   create_a_product,
   update_a_product,
-  read_a_product
+  read_a_product,
+  update_a_user,
+  read_a_user,
+  update_a_vote,
+  read_a_vote
 };

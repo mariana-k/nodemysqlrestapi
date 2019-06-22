@@ -4,6 +4,8 @@ var pool = require('./db.js');
 //Product object constructor
 var Product = function(product){
     this.product_name = product.product_name;
+    this.product_description = product.product_description;
+    this.product_quantity = product.product_quantity;
     this.status = product.status;
     this.created_at = new Date();
 };
@@ -17,6 +19,7 @@ var Order = function(order){
 
 //User object constructor
 var User = function(user){
+    this.user_email = user.user_email;
     this.user = user.user;
     this.status = user.status;
     this.created_at = new Date();
@@ -25,6 +28,7 @@ var User = function(user){
 
 //Vote object constructor
 var Vote = function(vote){
+    this.vote_comment = vote.vote_comment;
     this.vote = vote.vote;
     this.status = vote.status;
     this.created_at = new Date();
@@ -80,14 +84,14 @@ Product.createProduct = function createProduct(newProduct, result) {
     });   
 };
 
-Product.getProductById = function createProduct(productId, result) {
+Product.getProductById = function getProductById(productId, result) {
     pool.getConnection(function(err, connection) {
         if(err) { 
           console.log(err); 
           callback(true); 
           return; 
         }
-    connection.query("Select product_name from j4qt8_hikashop_product where product_id = ? ", productId, function (err, res) {             
+    connection.query("Select * from j4qt8_hikashop_product where product_id = ? ", productId, function (err, res) {             
         connection.release();    
         if(err) {
                 console.log("error: ", err);
@@ -107,7 +111,10 @@ Product.updateById = function(id, product, result){
           callback(true); 
           return; 
         }
-    connection.query("UPDATE j4qt8_hikashop_product SET product_name = ? WHERE product_id = ?", [product.product_name, id], function (err, res) {
+    var productName = product.product_name ? '?' : 'product_name';
+    var productDescription = product.product_description ? '?' : 'product_description';
+    var productQuantity = product.product_quantity ? '?' : 'product_quantity';
+    connection.query("UPDATE j4qt8_hikashop_product SET product_name =" +  productName + ", product_description = " + productDescription + ", product_quantity = " + productQuantity + " WHERE product_id = ?", [product.product_name, product.product_description, product.product_quantity, id], function (err, res) {
         connection.release();    
         if(err) {
                 console.log("error: ", err);
@@ -163,6 +170,90 @@ User.getAllUsers = function getAllUsers(result) {
         });   
     });
     };
+
+
+    User.getUserById = function getUserById(userId, result) {
+        pool.getConnection(function(err, connection) {
+            if(err) { 
+              console.log(err); 
+              callback(true); 
+              return; 
+            }
+        connection.query("Select * from j4qt8_hikashop_user where user_id = ? ", userId, function (err, res) {             
+            connection.release();    
+            if(err) {
+                    console.log("error: ", err);
+                    result(err, null);
+                }
+                else{
+                    result(null, res);
+              
+                }
+            });  
+        });
+        };
+    User.updateById = function(id, user, result){
+        pool.getConnection(function(err, connection) {
+            if(err) { 
+              console.log(err); 
+              callback(true); 
+              return; 
+            }
+        var userEmail = user.user_email ? '?' : 'user_email';
+        connection.query("UPDATE j4qt8_hikashop_user SET user_email =" +  userEmail + " WHERE user_id = ?", [user.user_email, id], function (err, res) {
+            connection.release();    
+            if(err) {
+                    console.log("error: ", err);
+                      result(null, err);
+                   }
+                 else{   
+                   result(null, res);
+                      }
+                  }); 
+                });
+      };
+
+
+      Vote.getVoteById = function geVoteById(voteId, result) {
+        pool.getConnection(function(err, connection) {
+            if(err) { 
+              console.log(err); 
+              callback(true); 
+              return; 
+            }
+        connection.query("Select * from j4qt8_hikashop_vote where vote_id = ? ", voteId, function (err, res) {             
+            connection.release();    
+            if(err) {
+                    console.log("error: ", err);
+                    result(err, null);
+                }
+                else{
+                    result(null, res);
+              
+                }
+            });  
+        });
+        };
+    Vote.updateById = function(id, vote, result){
+        pool.getConnection(function(err, connection) {
+            if(err) { 
+              console.log(err); 
+              callback(true); 
+              return; 
+            }
+        var voteComment = vote.vote_comment ? '?' : 'vote_comment';
+        connection.query("UPDATE j4qt8_hikashop_vote SET vote_comment =" +  voteComment + " WHERE vote_id = ?", [vote.vote_comment, id], function (err, res) {
+            connection.release();    
+            if(err) {
+                    console.log("error: ", err);
+                      result(null, err);
+                   }
+                 else{   
+                   result(null, res);
+                      }
+                  }); 
+                });
+      };
 
 
 Vote.getAllVotes = function getAllVotes(result) {

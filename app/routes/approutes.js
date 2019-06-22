@@ -19,9 +19,18 @@ module.exports = function(app) {
     app.route('/users')
     .get(appController.list_all_users);
 
+    app.route('/users/:userId')
+    .get(appController.read_a_user)
+    .put(appController.update_a_user);
+
      // voteList Routes
      app.route('/votes')
      .get(appController.list_all_votes);
+
+
+     app.route('/votes/:voteId')
+    .get(appController.read_a_vote)
+    .put(appController.update_a_vote);
 
       // categoryList Routes
     app.route('/categories')
